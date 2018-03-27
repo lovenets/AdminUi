@@ -42,7 +42,7 @@
 							<select class="form-control" value.bind="client.grantType & validate">
 								<option model.bind="null">Choose...</option>
 								<option repeat.for="gt of clientHelper.grantTypes"
-										model.bind="gt" value.bind="client.grantType & validate">
+										model.bind="gt">
 									${gt}
 								</option>
 							</select>

@@ -29,15 +29,10 @@ export class UpdateClient {
 	public selectedApiResources: Array<number> = [];
 	public allowedScopes: Array<number> = [];
 
-
-
 	constructor(httpClient: HttpClient, router: Router, clientHelper: ClientHelper, controllerFactory: ValidationControllerFactory, validator: Validator) {
 		this.httpClient = httpClient;
 		this.clientHelper = clientHelper;
 		this.router = router;
-		this.validator = validator;
-		this.controller = controllerFactory.createForCurrentScope(validator);
-
 		this.validator = validator;
 		this.controller = controllerFactory.createForCurrentScope(validator);
 
@@ -60,10 +55,9 @@ export class UpdateClient {
 		
 	}
 
-	private validateWhole() {		
+	private validateWhole() {
 		this.validator.validateObject(this.client)
 			.then(results => this.canSave = results.every(result => result.valid));
-	
 	}
 
 	activate(params: { clientId: string; }) {
