@@ -1,0 +1,41 @@
+﻿<template>
+	<div class="panel panel-default cl-xs-11">
+		<div class="panel-heading">
+			<h3>View Clients </h3>
+			<p>Click on any row to update the details of the client</p>
+		</div>
+		<br />
+		<!--<p if.bind="!forecasts"><em>Loading...</em></p>-->
+		<div class="panel-body">
+			<!--<p if.bind="!forecasts"><em>Loading...</em></p>-->
+			<div class="table-responsive">
+				<table class="table cl-xs-10 table-bordered">
+					<thead class="thead-dark">
+						<tr>							
+							<th scope="col">Client ID</th>
+							<th scope="col">Client Name</th>
+							<th scope="col">Grant Type</th>
+							<th scope="col">Client Property</th>
+							<th scope="col">Client URI</th>
+							<th scope="col">Redirect URL</th>
+							<th scope="col">Front Channel Logout URL</th>
+							<th scope="col">Post Logout URL</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr repeat.for="client of clients" click.delegate="onSelectContact($event, client)">
+							<td>${ client.clientId }</td>
+							<td>${ client.clientName }</td>
+							<td>${ client.grantType }</td>
+							<td>${ client.clientProperty }</td>
+							<td>${ client.clientUri }</td>
+							<td>${ client.redirectUrl }</td>
+							<td>${ client.frontChannelLogoutUrl }</td>
+							<td>${ client.postLogoutUrl }</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</template>

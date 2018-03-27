@@ -1,0 +1,125 @@
+﻿<template>
+	<div class="panel panel-default cl-xs-11">
+		<div class="panel-heading">
+			<h3>Add Client </h3>
+		</div>
+		<br />
+		<!--<p if.bind="!forecasts"><em>Loading...</em></p>-->
+		<div class="panel-body">
+			<form>
+				<div class="form-group">
+					<div class="row">
+
+						<div class="col-xs-5" validation-errors.bind="clientIdErrors">
+							<!-- Client Id -->
+							<label for="clientId" class="control-label">Client ID</label>
+							<input type="text" class="form-control" id="clientId" name="clientId" placeholder="Client ID" value.bind="client.clientId & validate">
+							<strong class="error" repeat.for="errorInfo of clientIdErrors">${errorInfo.error.message}</strong>
+						</div>
+
+						<div class="col-xs-5" validation-errors.bind="clientNameErrors">
+							<!-- Client Name -->
+							<label for="clientName" class="control-label">Client Name</label>
+							<input type="text" class="form-control" id="clientName" name="clientName" placeholder="Client Name" value.bind="client.clientName & validate">
+							<strong class="error" repeat.for="errorInfo of clientNameErrors">${errorInfo.error.message}</strong>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="row">
+						<div class="col-xs-5"  validation-errors.bind="clientSecretErrors">
+							<!-- Client Secret -->
+							<label for="clientSecret" class="control-label">Client Secret</label>
+							<input type="text" class="form-control" id="clientSecret" name="clientSecret" placeholder="Clinet Secret" value.bind="client.clientSecret & validate">
+							<strong class="error" repeat.for="errorInfo of clientSecretErrors">${errorInfo.error.message}</strong>
+						</div>
+
+						<div class="col-xs-5" validation-errors.bind="clientGrantTypeErrors">
+							<!-- Grant Type -->
+							<label for="grantType" class="control-label">Grant Type</label>
+							<select class="form-control" value.bind="client.grantType & validate">
+								<option repeat.for="gt of clientHelper.grantTypes" model.bind="gt">	${gt} </option>
+							</select>
+							<strong class="error" repeat.for="errorInfo of clientGrantTypeErrors">${errorInfo.error.message}</strong>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="row">
+						<div class="col-xs-5">
+							<!-- Client Properties -->
+							<label for="clientProperties" class="control-label">Client Properties</label>
+							<select class="form-control" value.bind="client.clientProperty & validate">
+								<option model.bind="select">Choose...</option>
+								<option repeat.for="cp of clientHelper.clientProperties"
+										model.bind="cp">
+									${cp}
+								</option>
+							</select>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="row">
+						<div class="col-xs-5">
+							<!-- Identity Resources -->
+							<label for="identityResources" class="control-label">Identity Resources</label>
+							<p repeat.for="identityResource of clientHelper.identityResources">
+								<input type="checkbox" model.bind="identityResource.name" checked.bind="selectedIdentityResources">
+								${identityResource.name}
+							</p>
+						</div>
+
+						<div class="col-xs-5">
+							<label for="ApiResources" class="control-label">Api Resources</label>
+							<p repeat.for="apiResource of clientHelper.apiResources">
+								<input type="checkbox" model.bind="apiResource.name" checked.bind="selectedApiResources">
+								${apiResource.name}
+							</p>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="form-group" validation-errors.bind="clientUriErrors">
+					<!-- Client Redirect Url -->
+					<label for="clientUri" class="control-label">Client URI</label>
+					<input type="text" class="form-control" id="clientUri" name="clientUri" placeholder="Client URI" value.bind="client.clientUri & validate">
+					<strong class="error" repeat.for="errorInfo of clientUriErrors">${errorInfo.error.message}</strong>
+				</div>
+
+				<div class="form-group" validation-errors.bind="clientRedirectUrlErrors">
+					<!-- Redirect Url -->
+					<label for="redirectUrl" class="control-label">Redirect URL</label>
+					<input type="text" class="form-control" id="redirectUrl" name="redirectUrl" placeholder="Redirect URL" value.bind="client.redirectUrl & validate">
+					<strong class="error" repeat.for="errorInfo of clientRedirectUrlErrors">${errorInfo.error.message}</strong>
+
+				</div>
+
+				<div class="form-group" validation-errors.bind="clientFrontChannelLogoutUrlErrors">
+					<!-- Front Channel Logout Url -->
+					<label for="frontChannelLogoutUrl" class="control-label">Front Channel Logout URL</label>
+					<input type="text" class="form-control" id="frontChannelLogoutUrl" name="frontChannelLogoutUrl" placeholder="Front Channel Logout URL" value.bind="client.frontChannelLogoutUrl & validate">
+					<strong class="error" repeat.for="errorInfo of clientFrontChannelLogoutUrlErrors">${errorInfo.error.message}</strong>
+
+				</div>
+
+				<div class="form-group" validation-errors.bind="clientPostLogoutUrlErrors">
+					<!-- Post Logout Url -->
+					<label for="postLogoutUrl" class="control-label">Post Logout URL</label>
+					<input type="text" class="form-control" id="postLogoutUrl" name="postLogoutUrl" placeholder="Post Logout URL" value.bind="client.postLogoutUrl & validate">
+					<strong class="error" repeat.for="errorInfo of clientPostLogoutUrlErrors">${errorInfo.error.message}</strong>
+				</div>
+
+				<div class="form-group">
+					<!-- Submit Button -->
+					<button type="submit" class="btn btn-primary" click.delegate="add()" disabled.bind="!canSave">Add</button>
+				</div>
+
+			</form>
+		</div>
+	</div>
+</template>
