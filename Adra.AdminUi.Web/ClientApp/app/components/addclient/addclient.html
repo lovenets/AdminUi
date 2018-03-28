@@ -94,35 +94,37 @@
 				<div class="form-group" validation-errors.bind="clientRedirectUrlErrors">
 					<!-- Redirect Url -->
 					<label for="redirectUrl" class="control-label">Redirect URL</label>
-					<button click.delegate="addRedirectInput()" class="glyphicon glyphicon-plus"></button>
-					<p repeat.for="uriInput of redirectUriArray">
+					<button click.delegate="addRedirectInput()" class="glyphicon glyphicon-plus"></button>					
+					<div class="input-group" repeat.for="uriInput of redirectUriArray">
 						<input type="text" class="form-control" id="redirectUrl" name="redirectUrl" placeholder="Redirect URL" value.bind="uriInput.uri & validate">
-						<strong class="error" repeat.for="errorInfo of clientRedirectUrlErrors">${errorInfo.error.message}</strong>
-					</p>
+						<span class="input-group-btn">
+							<button type="button" class="glyphicon glyphicon-remove btn btn-secondary" click.delegate="removeRedirectInput(uriInput.id)"></button>
+						</span>
+						<strong class="error" repeat.for="errorInfo of clientRedirectUrlErrors">${errorInfo.error.message}</strong> 
+					</div>	
+					</div>
 
-				</div>
+					<div class="form-group" validation-errors.bind="clientFrontChannelLogoutUrlErrors">
+						<!-- Front Channel Logout Url -->
+						<label for="frontChannelLogoutUrl" class="control-label">Front Channel Logout URL</label>
+						<input type="text" class="form-control" id="frontChannelLogoutUrl" name="frontChannelLogoutUrl" placeholder="Front Channel Logout URL" value.bind="client.frontChannelLogoutUrl & validate">
+						<strong class="error" repeat.for="errorInfo of clientFrontChannelLogoutUrlErrors">${errorInfo.error.message}</strong>
 
-				<div class="form-group" validation-errors.bind="clientFrontChannelLogoutUrlErrors">
-					<!-- Front Channel Logout Url -->
-					<label for="frontChannelLogoutUrl" class="control-label">Front Channel Logout URL</label>
-					<input type="text" class="form-control" id="frontChannelLogoutUrl" name="frontChannelLogoutUrl" placeholder="Front Channel Logout URL" value.bind="client.frontChannelLogoutUrl & validate">
-					<strong class="error" repeat.for="errorInfo of clientFrontChannelLogoutUrlErrors">${errorInfo.error.message}</strong>
+					</div>
 
-				</div>
+					<div class="form-group" validation-errors.bind="clientPostLogoutUrlErrors">
+						<!-- Post Logout Url -->
+						<label for="postLogoutUrl" class="control-label">Post Logout URL</label>
+						<input type="text" class="form-control" id="postLogoutUrl" name="postLogoutUrl" placeholder="Post Logout URL" value.bind="client.postLogoutUrl & validate">
+						<strong class="error" repeat.for="errorInfo of clientPostLogoutUrlErrors">${errorInfo.error.message}</strong>
+					</div>
 
-				<div class="form-group" validation-errors.bind="clientPostLogoutUrlErrors">
-					<!-- Post Logout Url -->
-					<label for="postLogoutUrl" class="control-label">Post Logout URL</label>
-					<input type="text" class="form-control" id="postLogoutUrl" name="postLogoutUrl" placeholder="Post Logout URL" value.bind="client.postLogoutUrl & validate">
-					<strong class="error" repeat.for="errorInfo of clientPostLogoutUrlErrors">${errorInfo.error.message}</strong>
-				</div>
+					<div class="form-group">
+						<!-- Submit Button -->
+						<button type="submit" class="btn btn-primary" click.delegate="add()" disabled.bind="!canSave">Add</button>
+					</div>
 
-				<div class="form-group">
-					<!-- Submit Button -->
-					<button type="submit" class="btn btn-primary" click.delegate="add()" disabled.bind="!canSave">Add</button>
-				</div>
-
-			</form>
+</form>
 		</div>
 	</div>
 </template>

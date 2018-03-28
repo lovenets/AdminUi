@@ -114,6 +114,11 @@ export class UpdateClient {
 		this.redirectUriArray.push(new UriInput(id, ""));
 	}
 
+	public removeRedirectInput(uriInput: UriInput) {
+		this.redirectUriArray = this.redirectUriArray.filter(obj => obj !== uriInput);
+		console.log(this.redirectUriArray);
+	}
+
 	public update() {
 		for (let resource of this.selectedIdentityResources) {
 			this.allowedScopes.push(resource);
