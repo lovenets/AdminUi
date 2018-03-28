@@ -7,21 +7,21 @@ import { DialogService } from 'aurelia-dialog';
 import { UriInput } from '../helpers/UriInput';
 import { ValidationControllerFactory, ValidationRules, ValidationController, Validator, validateTrigger } from 'aurelia-validation';
 
-@inject(HttpClient, Router, ClientHelper,  ValidationControllerFactory, Validator)
+@inject(HttpClient, Router, ClientHelper, ValidationControllerFactory, Validator)
 export class UpdateClient {
 	httpClient: HttpClient;
 	router: Router;
 	clientHelper: ClientHelper;
-    validator: Validator;
-    canSave: boolean = false;
-	controller: ValidationController;	
+	validator: Validator;
+	canSave: boolean = false;
+	controller: ValidationController;
 	client: Client = new Client();
 	selectedIdentityResources: Array<number> = [];
 	selectedApiResources: Array<number> = [];
 	allowedScopes: Array<number> = [];
 	redirectUrls: Array<string> = [];
-    redirectUriArray: Array<UriInput> = [];
-    errors: any;
+	redirectUriArray: Array<UriInput> = [];
+	errors: any;
 
 	constructor(httpClient: HttpClient, router: Router, clientHelper: ClientHelper, controllerFactory: ValidationControllerFactory, validator: Validator) {
 		this.httpClient = httpClient;
@@ -29,42 +29,42 @@ export class UpdateClient {
 		this.router = router;
 		this.validator = validator;
 		this.controller = controllerFactory.createForCurrentScope(validator);
-       
-		//this.controller = controllerFactory.createForCurrentScope();
-	
-		this.controller.validateTrigger = validateTrigger.changeOrBlur;
-        this.controller.subscribe(event => this.validateWhole());
 
-		
+		//this.controller = controllerFactory.createForCurrentScope();
+
+		this.controller.validateTrigger = validateTrigger.changeOrBlur;
+		this.controller.subscribe(event => this.validateWhole());
+
+
 	}
- 
-    private setupValidation() {
-        ValidationRules
-            .ensure('clientId').required()
-            .ensure('clientName').required()
-            .ensure('grantType').required()
-            .ensure('clientUri').required().matches(this.clientHelper.urlRegex)
-            .ensure('redirectUrl').matches(this.clientHelper.urlRegex)
-            .ensure('frontChannelLogoutUrl').matches(this.clientHelper.urlRegex)
-            .ensure('postLogoutUrl').matches(this.clientHelper.urlRegex)
-            .on(this.client); 
-    }
+
+	private setupValidation() {
+		ValidationRules
+			.ensure('clientId').required()
+			.ensure('clientName').required()
+			.ensure('grantType').required()
+			.ensure('clientUri').required().matches(this.clientHelper.urlRegex)
+			.ensure('redirectUrl').matches(this.clientHelper.urlRegex)
+			.ensure('frontChannelLogoutUrl').matches(this.clientHelper.urlRegex)
+			.ensure('postLogoutUrl').matches(this.clientHelper.urlRegex)
+			.on(this.client);
+	}
 
 	private validateWhole() {
-        this.validator.validateObject(this.client)
-            .then(results => this.errors = results);
-        this.canSave = this.isAllvalid(this.errors);
-         
-    }
-    private isAllvalid(errors: any) {      
-        for (var error in errors)
-            if (!errors[error].valid) return false;
-            return true;
-     }
+		this.validator.validateObject(this.client)
+			.then(results => this.errors = results);
+		this.canSave = this.isAllvalid(this.errors);
+
+	}
+	private isAllvalid(errors: any) {
+		for (var error in errors)
+			if (!errors[error].valid) return false;
+		return true;
+	}
 
 	activate(params: { clientId: string; }) {
-        var client = { ClientId: params.clientId };
-        this.setupValidation();
+		var client = { ClientId: params.clientId };
+		this.setupValidation();
 		this.httpClient.fetch('api/client/getclientbyclientid',
 			{
 				method: "POST",
@@ -100,7 +100,7 @@ export class UpdateClient {
 				} else {
 					this.redirectUriArray.push(new UriInput(0, ""));
 				}
-				this.client = data;			
+				this.client = data;
 			});
 	}
 	public resetController() {
@@ -114,6 +114,11 @@ export class UpdateClient {
 		this.redirectUriArray.push(new UriInput(id, ""));
 	}
 
+	public removeRedirectInput(uriInput: UriInput) {
+		this.redirectUriArray = this.redirectUriArray.filter(obj => obj !== uriInput);
+		console.log(this.redirectUriArray);
+	}
+
 	public update() {
 		for (let resource of this.selectedIdentityResources) {
 			this.allowedScopes.push(resource);
@@ -121,7 +126,7 @@ export class UpdateClient {
 		for (let resource of this.selectedApiResources) {
 			this.allowedScopes.push(resource);
 		}
-		
+
 		for (let uriInput of this.redirectUriArray) {
 			if (uriInput.uri != "") {
 				this.redirectUrls.push(uriInput.uri);
@@ -150,7 +155,7 @@ export class UpdateClient {
 	public delete(clientId: string) {
 		var retVal = confirm("Are you sure you need to delete this client ?");
 		if (retVal == true) {
-			var client = { ClientId: this.client.clientId};
+			var client = { ClientId: this.client.clientId };
 
 			this.httpClient.fetch('api/client/deleteclient',
 				{
@@ -165,7 +170,7 @@ export class UpdateClient {
 					if (data == "ok") {
 						alert("Client Successfully Deleted.");
 						this.router.navigateToRoute('viewallclients')
-					}					
+					}
 				});
 		}
 	}

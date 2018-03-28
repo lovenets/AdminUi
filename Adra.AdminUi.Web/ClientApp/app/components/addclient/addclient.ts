@@ -69,8 +69,14 @@ export class AddClient {
 	}
 
 	public addRedirectInput() {
+		console.log("here");
 		var id = this.redirectUriArray.length + 1;
 		this.redirectUriArray.push(new UriInput(id, ""));
+		console.log(this.redirectUriArray);
+	}
+	public removeRedirectInput(uriInput: UriInput) {
+		this.redirectUriArray = this.redirectUriArray.filter(obj => obj !== uriInput);		
+		console.log(this.redirectUriArray);
 	}
 
 	private validateWhole() {		

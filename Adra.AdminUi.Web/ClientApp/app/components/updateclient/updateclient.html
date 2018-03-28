@@ -100,10 +100,13 @@
 					<!-- Redirect Url -->
 					<label for="redirectUrl" class="control-label">Redirect URL</label>
 					<button click.delegate="addRedirectInput()" class="glyphicon glyphicon-plus"></button>
-					<p repeat.for="uriInput of redirectUriArray">
+					<div class="input-group" repeat.for="uriInput of redirectUriArray">
 						<input type="text" class="form-control" id="redirectUrl" name="redirectUrl" placeholder="Redirect URL" value.bind="uriInput.uri & validate">
+						<span class="input-group-btn">
+							<button type="button" class="glyphicon glyphicon-remove btn btn-secondary" click.delegate="removeRedirectInput(uriInput)"></button>
+						</span>
 						<strong class="error" repeat.for="errorInfo of clientRedirectUrlErrors">${errorInfo.error.message}</strong>
-					</p>
+					</div>
 				</div>
 
 				<div class="form-group" validation-errors.bind="clientFrontChannelLogoutUrlErrors">
@@ -119,7 +122,7 @@
 					<label for="postLogoutUrl" class="control-label">Post Logout URL</label>
 					<input type="text" class="form-control" id="postLogoutUrl" name="postLogoutUrl" placeholder="Post Logout URL" value.bind="client.postLogoutUrl & validate">
 					<strong class="error" repeat.for="errorInfo of clientPostLogoutUrlErrors">${errorInfo.error.message}</strong>
-				</div
+				</div>
 				<div class="form-group">
 					<!-- Submit Button -->
 					<button type="submit" disabled.bind="!canSave" class="btn btn-primary">Update</button>
