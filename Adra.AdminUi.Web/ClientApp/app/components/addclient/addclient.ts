@@ -3,6 +3,7 @@ import { inject } from 'aurelia-framework';
 import { Router } from 'aurelia-router';
 import { ClientHelper } from '../helpers/clienthelper';
 import { Client } from '../helpers/client';
+import { UriInput } from '../helpers/UriInput';
 import { ValidationControllerFactory, ValidationRules, ValidationController, Validator, validateTrigger } from 'aurelia-validation';
 
 @inject(HttpClient, ClientHelper, Router, ValidationControllerFactory, Validator)
@@ -21,12 +22,13 @@ export class AddClient {
 	public grantType: string = "";
 	public clientProperty: string = "";
 	public clientUri: string = "";
-	public redirectUrl: string = "";
 	public frontChannelLogoutUrl: string = "";
 	public postLogoutUrl: string = "";
 	public selectedIdentityResources: Array<number> = [];
 	public selectedApiResources: Array<number> = [];
 	public allowedScopes: Array<number> = [];
+	public redirectUriArray: Array<UriInput> = [];
+	public redirectUrls: Array<string> = [];
 
 	constructor(httpClient: HttpClient, clientHelper: ClientHelper, router: Router, controllerFactory: ValidationControllerFactory, validator: Validator) {
 		this.httpClient = httpClient;
@@ -39,7 +41,6 @@ export class AddClient {
 		ValidationRules
 			.ensure('clientId').required()
 			.ensure('clientName').required()
-			.ensure('clientSecret').required()	
 			.ensure('grantType').required()
 			.ensure('clientUri').required().matches(this.clientHelper.urlRegex)
 			.ensure('redirectUrl').matches(this.clientHelper.urlRegex)
@@ -50,7 +51,9 @@ export class AddClient {
 		this.canSave = false;
 		this.controller.validateTrigger = validateTrigger.changeOrBlur;
 		this.controller.subscribe(event => this.validateWhole());
-		
+
+	
+		this.redirectUriArray.push(new UriInput(1,""));
 	
 	}
 
@@ -65,6 +68,11 @@ export class AddClient {
 		
 	}
 
+	public addRedirectInput() {
+		var id = this.redirectUriArray.length + 1;
+		this.redirectUriArray.push(new UriInput(id, ""));
+	}
+
 	private validateWhole() {		
 		this.validator.validateObject(this.client)
 			.then(results => this.canSave = results.every(result => result.valid));		
@@ -77,9 +85,16 @@ export class AddClient {
 			}
 			for (let resource of this.selectedApiResources) {
 				this.allowedScopes.push(resource);
-			}
+		}
 
-		var client = { ClientId: this.client.clientId, ClientName: this.client.clientName, ClientSecret: this.client.clientSecret, GrantType: this.client.grantType, ClientProperty: this.client.clientProperty, AllowedScopes: this.allowedScopes, ClientUri: this.client.clientUri, RedirectUrl: this.client.redirectUrl, FrontChannelLogoutUrl: this.client.frontChannelLogoutUrl, PostLogoutUrl: this.client.postLogoutUrl };
+		for (let uriInput of this.redirectUriArray) {
+			if (uriInput.uri != "") {
+				this.redirectUrls.push(uriInput.uri);
+			}					
+		}
+		
+
+		var client = { ClientId: this.client.clientId, ClientName: this.client.clientName, ClientSecret: this.client.clientSecret, GrantType: this.client.grantType, ClientProperty: this.client.clientProperty, AllowedScopes: this.allowedScopes, ClientUri: this.client.clientUri, RedirectUrls: this.redirectUrls, FrontChannelLogoutUrl: this.client.frontChannelLogoutUrl, PostLogoutUrl: this.client.postLogoutUrl };
 
 			this.httpClient.fetch('api/client/addclient',
 				{

@@ -13,7 +13,7 @@ namespace SharedModels
         public string ClientProperty { get; set; }
         public string[] AllowedScopes { get; set; }        
         public string ClientUri { get; set; }
-        public string RedirectUrl { get; set; }
+        public string[] RedirectUrls { get; set; }
         public string FrontChannelLogoutUrl { get; set; }
         public string PostLogoutUrl { get; set; }
 

@@ -28,7 +28,7 @@
 
 				<div class="form-group">
 					<div class="row">
-						<div class="col-xs-5"  validation-errors.bind="clientSecretErrors">
+						<div class="col-xs-5" validation-errors.bind="clientSecretErrors">
 							<!-- Client Secret -->
 							<label for="clientSecret" class="control-label">Client Secret</label>
 							<input type="text" class="form-control" id="clientSecret" name="clientSecret" placeholder="Clinet Secret" value.bind="client.clientSecret & validate">
@@ -94,8 +94,11 @@
 				<div class="form-group" validation-errors.bind="clientRedirectUrlErrors">
 					<!-- Redirect Url -->
 					<label for="redirectUrl" class="control-label">Redirect URL</label>
-					<input type="text" class="form-control" id="redirectUrl" name="redirectUrl" placeholder="Redirect URL" value.bind="client.redirectUrl & validate">
-					<strong class="error" repeat.for="errorInfo of clientRedirectUrlErrors">${errorInfo.error.message}</strong>
+					<button click.delegate="addRedirectInput()" class="glyphicon glyphicon-plus"></button>
+					<p repeat.for="uriInput of redirectUriArray">
+						<input type="text" class="form-control" id="redirectUrl" name="redirectUrl" placeholder="Redirect URL" value.bind="uriInput.uri & validate">
+						<strong class="error" repeat.for="errorInfo of clientRedirectUrlErrors">${errorInfo.error.message}</strong>
+					</p>
 
 				</div>
 

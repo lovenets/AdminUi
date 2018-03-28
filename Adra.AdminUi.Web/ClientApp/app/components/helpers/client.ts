@@ -5,7 +5,7 @@
 	public grantType: string = "";
 	public clientProperty: string = "";
 	public clientUri: string = "";
-	public redirectUrl: string = "";
+	public redirectUrls: Array<string> = [];
 	public frontChannelLogoutUrl: string = "";
 	public postLogoutUrl: string = "";
 	public allowedScopes: Array<string> = [];

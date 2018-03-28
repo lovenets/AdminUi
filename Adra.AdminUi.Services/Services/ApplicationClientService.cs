@@ -1,10 +1,12 @@
 ﻿using BusinessLogicLayer.Services.Interfaces;
 using DataAccessLayer.Repositories.Interfaces;
 using IdentityServer4.EntityFramework.Entities;
+using IdentityServer4.EntityFramework.Mappers;
 using IdentityServer4.Models;
 using SharedModels;
 using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Text;
 
 namespace BusinessLogicLayer.Services
@@ -16,7 +18,7 @@ namespace BusinessLogicLayer.Services
         public ApplicationClientService(IApplicationClientRepository applicationClientService)
         {
             _applicationClientRepository = applicationClientService;
-        }     
+        }
 
         public List<string> GetClientProperties()
         {
@@ -67,7 +69,7 @@ namespace BusinessLogicLayer.Services
             var grantTypes = new List<string>();
 
             grantTypes.Add(Enums.GrantTypes.ClientCredentials);
-            grantTypes.Add(Enums.GrantTypes.Password);            
+            grantTypes.Add(Enums.GrantTypes.Password);
             grantTypes.Add(Enums.GrantTypes.Hybrid);
 
             return grantTypes;
@@ -97,7 +99,7 @@ namespace BusinessLogicLayer.Services
             IdentityServer4.EntityFramework.Entities.Client clientModel = MapBllToDal(client);
             _applicationClientRepository.AddClient(clientModel);
 
-        }       
+        }
 
         public void DeleteClient(string clientId)
         {
@@ -117,98 +119,118 @@ namespace BusinessLogicLayer.Services
 
         private IdentityServer4.EntityFramework.Entities.Client MapBllToDal(SharedModels.Client client)
         {
-            IdentityServer4.EntityFramework.Entities.Client clientModel = new IdentityServer4.EntityFramework.Entities.Client();
+            IdentityServer4.Models.Client clientModelIds4 = new IdentityServer4.Models.Client();
 
-            clientModel.ClientName = client.ClientName;
-            clientModel.ClientUri = client.ClientUri;
-            clientModel.ClientId = client.ClientId;
-            clientModel.FrontChannelLogoutUri = client.FrontChannelLogoutUrl;
+            clientModelIds4.ClientName = client.ClientName;
+            clientModelIds4.ClientUri = client.ClientUri;
+            clientModelIds4.ClientId = client.ClientId;
+            clientModelIds4.FrontChannelLogoutUri = client.FrontChannelLogoutUrl;
 
-            ClientSecret secret = new ClientSecret();
-            secret.Value = new IdentityServer4.Models.Secret(client.ClientSecret.Sha256()).Value;
-            secret.Type = "SharedSecret";
-            clientModel.ClientSecrets = new List<ClientSecret>();
-            clientModel.ClientSecrets.Add(secret);
-
-            ClientGrantType grantType = new ClientGrantType();
-            grantType.GrantType = client.GrantType;
-            clientModel.AllowedGrantTypes = new List<ClientGrantType>();
-            clientModel.AllowedGrantTypes.Add(grantType);
-
-            ClientProperty clientProperty = new ClientProperty();
-            clientProperty.Value = client.ClientProperty;
-            clientProperty.Key = "ApplicationType";
-            clientModel.Properties = new List<ClientProperty>();
-            clientModel.Properties.Add(clientProperty);
-
-            clientModel.AllowedScopes = new List<ClientScope>();
-            foreach (string s in client.AllowedScopes)
+            if (client.ClientSecret != null)
             {
-                ClientScope clientScope = new ClientScope();
-                clientScope.Scope = s.Replace(" ", "_");
-                clientModel.AllowedScopes.Add(clientScope);
+                IdentityServer4.Models.Secret secret = new IdentityServer4.Models.Secret(client.ClientSecret.Sha256());
+                secret.Type = "SharedSecret";
+                clientModelIds4.ClientSecrets = new List<IdentityServer4.Models.Secret>();
+                clientModelIds4.ClientSecrets.Add(secret);
+            }
+            
+
+            clientModelIds4.AllowedGrantTypes = new List<string>();
+            client.GrantType = client.GrantType.Replace(" ", "_");
+            clientModelIds4.AllowedGrantTypes.Add(client.GrantType);
+
+            if (client.ClientProperty != null)
+            {
+                string key = "ApplicationType";
+                clientModelIds4.Properties = new Dictionary<string, string>();
+                clientModelIds4.Properties.Add(key, client.ClientProperty);
             }
 
-            ClientRedirectUri clientRedirectUri = new ClientRedirectUri();
-            clientRedirectUri.RedirectUri = client.RedirectUrl;
-            clientModel.RedirectUris = new List<ClientRedirectUri>();
-            clientModel.RedirectUris.Add(clientRedirectUri);
+            clientModelIds4.AllowedScopes = new List<string>();
+            foreach (string scope in client.AllowedScopes)
+            {
+                var replacedScope = scope.Replace(" ", "_");
+                clientModelIds4.AllowedScopes.Add(replacedScope);
+            }
 
-            ClientPostLogoutRedirectUri postLogoutRedirectUrl = new ClientPostLogoutRedirectUri();
-            postLogoutRedirectUrl.PostLogoutRedirectUri = client.PostLogoutUrl;
-            clientModel.PostLogoutRedirectUris = new List<ClientPostLogoutRedirectUri>();
-            clientModel.PostLogoutRedirectUris.Add(postLogoutRedirectUrl);
+            clientModelIds4.RedirectUris = new List<string>();
+            foreach (string redirctUri in client.RedirectUrls)
+            {
+                clientModelIds4.RedirectUris.Add(redirctUri);
+            }
+            
+            clientModelIds4.PostLogoutRedirectUris = new List<string>();
+            clientModelIds4.PostLogoutRedirectUris.Add(client.PostLogoutUrl);
 
-            return clientModel;
+            return clientModelIds4.ToEntity();
         }
 
         private SharedModels.Client MapDaltoBll(IdentityServer4.EntityFramework.Entities.Client clientModel)
         {
+            IdentityServer4.Models.Client clientModelIds4 = new IdentityServer4.Models.Client();
+            clientModelIds4 = clientModel.ToModel();
+
             SharedModels.Client client = new SharedModels.Client();
-            client.ClientId = clientModel.ClientId;
-            client.ClientName = clientModel.ClientName;
-            client.ClientUri = clientModel.ClientUri;
-            client.FrontChannelLogoutUrl = clientModel.FrontChannelLogoutUri;
+            client.ClientId = clientModelIds4.ClientId;
+            client.ClientName = clientModelIds4.ClientName;
+            client.ClientUri = clientModelIds4.ClientUri;
+            client.FrontChannelLogoutUrl = clientModelIds4.FrontChannelLogoutUri;
 
-            if (clientModel.ClientSecrets.Count > 0)
+            if (clientModelIds4.ClientSecrets.Count > 0)
             {
-                client.ClientSecret = clientModel.ClientSecrets[0].Value;
-
+                foreach (IdentityServer4.Models.Secret secret in clientModelIds4.ClientSecrets)
+                {
+                    client.ClientSecret = secret.Value;
+                }
             }
 
-            if (clientModel.AllowedGrantTypes.Count > 0)
+            if (clientModelIds4.AllowedGrantTypes.Count > 0)
             {
-                client.GrantType = clientModel.AllowedGrantTypes[0].GrantType;
+                foreach (string grantType in clientModelIds4.AllowedGrantTypes)
+                {
+                    client.GrantType = grantType;
+                }
             }
 
-            if (clientModel.Properties.Count > 0)
+            if (clientModelIds4.Properties.Count > 0)
             {
-                client.ClientProperty = clientModel.Properties[0].Value;
+                foreach (var property in clientModelIds4.Properties)
+                {
+                    client.ClientProperty = property.Value;
+                }
             }
 
-            if (clientModel.RedirectUris.Count > 0)
+            if (clientModelIds4.RedirectUris.Count > 0)
             {
-                client.RedirectUrl = clientModel.RedirectUris[0].RedirectUri;
+                client.RedirectUrls = new string[clientModel.RedirectUris.Count];
+                int i = 0;
+                foreach (string uri in clientModelIds4.RedirectUris)
+                {
+                    client.RedirectUrls[i] = uri;
+                    i++;
+                }
             }
 
-            if (clientModel.PostLogoutRedirectUris.Count > 0)
+            if (clientModelIds4.PostLogoutRedirectUris.Count > 0)
             {
-                client.PostLogoutUrl = clientModel.PostLogoutRedirectUris[0].PostLogoutRedirectUri;
+                foreach (string uri in clientModelIds4.PostLogoutRedirectUris)
+                {
+                    client.PostLogoutUrl = uri;
+                }
             }
 
-            if (clientModel.AllowedScopes.Count > 0)
+            if (clientModelIds4.AllowedScopes.Count > 0)
             {
                 client.AllowedScopes = new string[clientModel.AllowedScopes.Count];
-
-                for (int i = 0; i < clientModel.AllowedScopes.Count; i++)
+                int i = 0;
+                foreach (string scope in clientModelIds4.AllowedScopes)
                 {
-                    ClientScope clientScope = clientModel.AllowedScopes[i];
-                    client.AllowedScopes[i] = clientScope.Scope;
+                    client.AllowedScopes[i] = scope;
+                    i++;
                 }
-                
             }
             return client;
         }
-       
+
     }
 }

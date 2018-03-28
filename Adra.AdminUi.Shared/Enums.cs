@@ -19,7 +19,7 @@ namespace SharedModels
         public static class GrantTypes
         {
             public static readonly string Password = "password";
-            public static readonly string ClientCredentials = "client credentials";
+            public static readonly string ClientCredentials = "client_credentials";
             public static readonly string Hybrid = "hybrid";
         }
     }

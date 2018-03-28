@@ -4,6 +4,7 @@ import { Router } from 'aurelia-router';
 import { Client } from '../helpers/client';
 import { ClientHelper } from '../helpers/clienthelper';
 import { DialogService } from 'aurelia-dialog';
+import { UriInput } from '../helpers/UriInput';
 import { ValidationControllerFactory, ValidationRules, ValidationController, Validator, validateTrigger } from 'aurelia-validation';
 
 @inject(HttpClient, Router, ClientHelper,  ValidationControllerFactory, Validator)
@@ -28,6 +29,9 @@ export class UpdateClient {
 	public selectedIdentityResources: Array<number> = [];
 	public selectedApiResources: Array<number> = [];
 	public allowedScopes: Array<number> = [];
+	public redirectUrls: Array<string> = [];
+	public redirectUriArray: Array<UriInput> = [];
+
 
 	constructor(httpClient: HttpClient, router: Router, clientHelper: ClientHelper, controllerFactory: ValidationControllerFactory, validator: Validator) {
 		this.httpClient = httpClient;
@@ -40,7 +44,6 @@ export class UpdateClient {
 		ValidationRules
 			.ensure('clientId').required()
 			.ensure('clientName').required()
-			.ensure('clientSecret').required()
 			.ensure('grantType').required()
 			.ensure('clientUri').required().matches(this.clientHelper.urlRegex)
 			.ensure('redirectUrl').matches(this.clientHelper.urlRegex)
@@ -88,6 +91,15 @@ export class UpdateClient {
 						}
 					}
 				}
+				if (data.redirectUrls) {
+					var i = 1;
+					for (let redirecturi of data.redirectUrls) {
+						this.redirectUriArray.push(new UriInput(i, redirecturi));
+						i++;
+					}
+				} else {
+					this.redirectUriArray.push(new UriInput(0, ""));
+				}
 				this.client = data;
 				console.log(this.client);				
 			});
@@ -98,6 +110,11 @@ export class UpdateClient {
 		}
 	}
 
+	public addRedirectInput() {
+		var id = this.redirectUriArray.length + 1;
+		this.redirectUriArray.push(new UriInput(id, ""));
+	}
+
 	public update() {
 		for (let resource of this.selectedIdentityResources) {
 			this.allowedScopes.push(resource);
@@ -105,8 +122,15 @@ export class UpdateClient {
 		for (let resource of this.selectedApiResources) {
 			this.allowedScopes.push(resource);
 		}
+		
+		for (let uriInput of this.redirectUriArray) {
+			if (uriInput.uri != "") {
+				this.redirectUrls.push(uriInput.uri);
+			}
+		}
+		console.log(this.redirectUriArray);
 
-		var client = { ClientId: this.client.clientId, ClientName: this.client.clientName, ClientSecret: this.client.clientSecret, GrantType: this.client.grantType, ClientProperty: this.client.clientProperty, AllowedScopes: this.allowedScopes, ClientUri: this.client.clientUri, RedirectUrl: this.client.redirectUrl, FrontChannelLogoutUrl: this.client.frontChannelLogoutUrl, PostLogoutUrl: this.client.postLogoutUrl };
+		var client = { ClientId: this.client.clientId, ClientName: this.client.clientName, ClientSecret: this.client.clientSecret, GrantType: this.client.grantType, ClientProperty: this.client.clientProperty, AllowedScopes: this.allowedScopes, ClientUri: this.client.clientUri, RedirectUrls: this.redirectUrls, FrontChannelLogoutUrl: this.client.frontChannelLogoutUrl, PostLogoutUrl: this.client.postLogoutUrl };
 
 		this.httpClient.fetch('api/client/updateclient',
 			{

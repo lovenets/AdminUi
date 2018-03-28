@@ -11,6 +11,7 @@
     <None Remove="ClientApp\app\components\addclient\addclient.ts" />
     <None Remove="ClientApp\app\components\helpers\client.ts" />
     <None Remove="ClientApp\app\components\helpers\clienthelper.ts" />
+    <None Remove="ClientApp\app\components\helpers\UriInput.ts" />
     <None Remove="ClientApp\app\components\updateclient\updateclient.ts" />
     <None Remove="ClientApp\app\components\viewallclients\viewallclients.ts" />
   </ItemGroup>
@@ -73,6 +74,7 @@
     <TypeScriptCompile Include="ClientApp\app\components\addclient\addclient.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\helpers\client.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\helpers\clienthelper.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\helpers\UriInput.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\viewallclients\viewallclients.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\updateclient\updateclient.ts" />
   </ItemGroup>
