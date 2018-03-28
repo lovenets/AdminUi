@@ -8,7 +8,7 @@
 
 
 		<div class="panel-body">
-			<form>
+			<form submit.delegate="update()">
 				<div class="form-group">
 					<div class="row">
 						<div class="col-xs-5" validation-errors.bind="clientIdErrors">
@@ -40,7 +40,7 @@
 							<!-- Grant Type -->
 							<label for="grantType" class="control-label">Grant Type</label>
 							<select class="form-control" value.bind="client.grantType & validate">
-								<option model.bind="null">Choose...</option>
+								 
 								<option repeat.for="gt of clientHelper.grantTypes"
 										model.bind="gt">
 									${gt}
@@ -57,7 +57,7 @@
 							<!-- Client Properties -->
 							<label for="clientProperties" class="control-label">Client Properties</label>
 							<select class="form-control" value.bind="client.clientProperty & validate">
-								<option model.bind="null">Choose...</option>
+							 
 								<option repeat.for="cp of clientHelper.clientProperties"
 										model.bind="cp">
 									${cp}
@@ -119,11 +119,11 @@
 					<label for="postLogoutUrl" class="control-label">Post Logout URL</label>
 					<input type="text" class="form-control" id="postLogoutUrl" name="postLogoutUrl" placeholder="Post Logout URL" value.bind="client.postLogoutUrl & validate">
 					<strong class="error" repeat.for="errorInfo of clientPostLogoutUrlErrors">${errorInfo.error.message}</strong>
-				</div>
+				</div
 				<div class="form-group">
 					<!-- Submit Button -->
-					<button type="submit" class="btn btn-primary" disabled.bind="!canSave" click.delegate="update()">Update</button>
-					<button class="btn btn-danger control-label" click.delegate="delete(client.clientId)"><span class="glyphicon glyphicon-trash"></span> Delete Client</button>
+					<button type="submit" disabled.bind="!canSave" class="btn btn-primary">Update</button>
+					<button class="btn btn-danger control-label"  click.delegate="delete(client.clientId)"><span class="glyphicon glyphicon-trash"></span> Delete Client</button>
 				</div>
 			</form>
 		</div>

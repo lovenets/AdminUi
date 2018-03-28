@@ -9,29 +9,19 @@ import { ValidationControllerFactory, ValidationRules, ValidationController, Val
 
 @inject(HttpClient, Router, ClientHelper,  ValidationControllerFactory, Validator)
 export class UpdateClient {
-	public httpClient: HttpClient;
-	public router: Router;
-	public clientHelper: ClientHelper;
-	public validator: Validator;
-	public canSave: boolean;
-	public controller: ValidationController;	
-	public client: Client = new Client();
-
-	public clientName: string = "";
-	public clientId: string = "";
-	public clientSecret: string = "";
-	public grantType: string = "";
-	public clientProperty: string = "";
-	public clientUri: string = "";
-	public redirectUrl: string = "";
-	public frontChannelLogoutUrl: string = "";
-	public postLogoutUrl: string = "";
-	public selectedIdentityResources: Array<number> = [];
-	public selectedApiResources: Array<number> = [];
-	public allowedScopes: Array<number> = [];
-	public redirectUrls: Array<string> = [];
-	public redirectUriArray: Array<UriInput> = [];
-
+	httpClient: HttpClient;
+	router: Router;
+	clientHelper: ClientHelper;
+    validator: Validator;
+    canSave: boolean = false;
+	controller: ValidationController;	
+	client: Client = new Client();
+	selectedIdentityResources: Array<number> = [];
+	selectedApiResources: Array<number> = [];
+	allowedScopes: Array<number> = [];
+	redirectUrls: Array<string> = [];
+    redirectUriArray: Array<UriInput> = [];
+    errors: any;
 
 	constructor(httpClient: HttpClient, router: Router, clientHelper: ClientHelper, controllerFactory: ValidationControllerFactory, validator: Validator) {
 		this.httpClient = httpClient;
@@ -39,32 +29,42 @@ export class UpdateClient {
 		this.router = router;
 		this.validator = validator;
 		this.controller = controllerFactory.createForCurrentScope(validator);
-
+       
 		//this.controller = controllerFactory.createForCurrentScope();
-		ValidationRules
-			.ensure('clientId').required()
-			.ensure('clientName').required()
-			.ensure('grantType').required()
-			.ensure('clientUri').required().matches(this.clientHelper.urlRegex)
-			.ensure('redirectUrl').matches(this.clientHelper.urlRegex)
-			.ensure('frontChannelLogoutUrl').matches(this.clientHelper.urlRegex)
-			.ensure('postLogoutUrl').matches(this.clientHelper.urlRegex)
-			.on(this.client);
-
-		this.canSave = false;
+	
 		this.controller.validateTrigger = validateTrigger.changeOrBlur;
-		this.controller.subscribe(event => this.validateWhole());
+        this.controller.subscribe(event => this.validateWhole());
 
 		
 	}
+ 
+    private setupValidation() {
+        ValidationRules
+            .ensure('clientId').required()
+            .ensure('clientName').required()
+            .ensure('grantType').required()
+            .ensure('clientUri').required().matches(this.clientHelper.urlRegex)
+            .ensure('redirectUrl').matches(this.clientHelper.urlRegex)
+            .ensure('frontChannelLogoutUrl').matches(this.clientHelper.urlRegex)
+            .ensure('postLogoutUrl').matches(this.clientHelper.urlRegex)
+            .on(this.client); 
+    }
 
 	private validateWhole() {
-		this.validator.validateObject(this.client)
-			.then(results => this.canSave = results.every(result => result.valid));
-	}
+        this.validator.validateObject(this.client)
+            .then(results => this.errors = results);
+        this.canSave = this.isAllvalid(this.errors);
+         
+    }
+    private isAllvalid(errors: any) {      
+        for (var error in errors)
+            if (!errors[error].valid) return false;
+            return true;
+     }
 
 	activate(params: { clientId: string; }) {
-		var client = { ClientId: params.clientId };
+        var client = { ClientId: params.clientId };
+        this.setupValidation();
 		this.httpClient.fetch('api/client/getclientbyclientid',
 			{
 				method: "POST",
