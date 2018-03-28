@@ -29,7 +29,9 @@
 							<td>${ client.grantType }</td>
 							<td>${ client.clientProperty }</td>
 							<td>${ client.clientUri }</td>
-							<td>${ client.redirectUrl }</td>
+							<td>
+								<p repeat.for="uri of client.redirectUrls">${ uri }</p>								
+							</td>
 							<td>${ client.frontChannelLogoutUrl }</td>
 							<td>${ client.postLogoutUrl }</td>
 						</tr>

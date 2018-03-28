@@ -100,8 +100,7 @@ export class UpdateClient {
 				} else {
 					this.redirectUriArray.push(new UriInput(0, ""));
 				}
-				this.client = data;
-				console.log(this.client);				
+				this.client = data;			
 			});
 	}
 	public resetController() {
@@ -128,7 +127,6 @@ export class UpdateClient {
 				this.redirectUrls.push(uriInput.uri);
 			}
 		}
-		console.log(this.redirectUriArray);
 
 		var client = { ClientId: this.client.clientId, ClientName: this.client.clientName, ClientSecret: this.client.clientSecret, GrantType: this.client.grantType, ClientProperty: this.client.clientProperty, AllowedScopes: this.allowedScopes, ClientUri: this.client.clientUri, RedirectUrls: this.redirectUrls, FrontChannelLogoutUrl: this.client.frontChannelLogoutUrl, PostLogoutUrl: this.client.postLogoutUrl };
 
