@@ -48,6 +48,10 @@ export class AddClient {
 			.ensure('postLogoutUrl').matches(this.clientHelper.urlRegex)
 			.on(this.client);
 
+		ValidationRules
+			.ensure('uri').matches(this.clientHelper.urlRegex)
+			.on(UriInput)
+
 		this.canSave = false;
 		this.controller.validateTrigger = validateTrigger.changeOrBlur;
 		this.controller.subscribe(event => this.validateWhole());

@@ -7,14 +7,14 @@ import { DialogService } from 'aurelia-dialog';
 import { UriInput } from '../helpers/UriInput';
 import { ValidationControllerFactory, ValidationRules, ValidationController, Validator, validateTrigger } from 'aurelia-validation';
 
-@inject(HttpClient, Router, ClientHelper,  ValidationControllerFactory, Validator)
+@inject(HttpClient, Router, ClientHelper, ValidationControllerFactory, Validator)
 export class UpdateClient {
 	public httpClient: HttpClient;
 	public router: Router;
 	public clientHelper: ClientHelper;
 	public validator: Validator;
 	public canSave: boolean;
-	public controller: ValidationController;	
+	public controller: ValidationController;
 	public client: Client = new Client();
 
 	public clientName: string = "";
@@ -51,11 +51,15 @@ export class UpdateClient {
 			.ensure('postLogoutUrl').matches(this.clientHelper.urlRegex)
 			.on(this.client);
 
+		ValidationRules
+			.ensure('uri').matches(this.clientHelper.urlRegex)
+			.on(UriInput)
+
 		this.canSave = false;
 		this.controller.validateTrigger = validateTrigger.changeOrBlur;
 		this.controller.subscribe(event => this.validateWhole());
 
-		
+
 	}
 
 	private validateWhole() {
@@ -100,7 +104,17 @@ export class UpdateClient {
 				} else {
 					this.redirectUriArray.push(new UriInput(0, ""));
 				}
-				this.client = data;			
+				this.client = data;
+				this.clientId = data.clientId;
+				this.clientName = data.clientName;
+				this.clientProperty = data.clientProperty;
+				this.clientSecret = data.clientSecret;
+				this.grantType = data.grantType;
+				this.clientProperty = data.clientProperty;
+				this.clientUri = data.clientUri;
+				this.frontChannelLogoutUrl = data.frontChannelLogoutUrl;
+				this.postLogoutUrl = data.postLogoutUrl;
+
 			});
 	}
 	public resetController() {
@@ -126,7 +140,7 @@ export class UpdateClient {
 		for (let resource of this.selectedApiResources) {
 			this.allowedScopes.push(resource);
 		}
-		
+
 		for (let uriInput of this.redirectUriArray) {
 			if (uriInput.uri != "") {
 				this.redirectUrls.push(uriInput.uri);
@@ -155,7 +169,7 @@ export class UpdateClient {
 	public delete(clientId: string) {
 		var retVal = confirm("Are you sure you need to delete this client ?");
 		if (retVal == true) {
-			var client = { ClientId: this.client.clientId};
+			var client = { ClientId: this.client.clientId };
 
 			this.httpClient.fetch('api/client/deleteclient',
 				{
@@ -170,7 +184,7 @@ export class UpdateClient {
 					if (data == "ok") {
 						alert("Client Successfully Deleted.");
 						this.router.navigateToRoute('viewallclients')
-					}					
+					}
 				});
 		}
 	}
