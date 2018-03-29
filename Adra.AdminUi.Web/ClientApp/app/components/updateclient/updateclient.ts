@@ -53,7 +53,7 @@ export class UpdateClient {
 
 	activate(params: { clientId: string; }) {
 		var client = { ClientId: params.clientId };
-		this.validationHelper.setupValidation(this.client); 	// get validation rules from validationhelper
+		this.validationHelper.setupValidation(); 	// get validation rules from validationhelper
 		this.httpClient.fetch('api/client/getclientbyclientid',
 			{
 				method: "POST",

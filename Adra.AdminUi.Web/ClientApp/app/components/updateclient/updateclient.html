@@ -1,7 +1,7 @@
 ﻿<template>
 	<!--<p if.bind="!client"><em>Loading...</em></p>-->
 
-	<div  class="panel panel-default cl-xs-11">
+	<div class="panel panel-default cl-xs-11">
 		<div class="panel-heading">
 			<h3>Update Client </h3>
 		</div>
@@ -40,7 +40,7 @@
 							<!-- Grant Type -->
 							<label for="grantType" class="control-label">Grant Type</label>
 							<select class="form-control" value.bind="client.grantType & validate">
-								 
+
 								<option repeat.for="gt of clientHelper.grantTypes"
 										model.bind="gt">
 									${gt}
@@ -57,7 +57,7 @@
 							<!-- Client Properties -->
 							<label for="clientProperties" class="control-label">Client Properties</label>
 							<select class="form-control" value.bind="client.clientProperty & validate">
-							 
+
 								<option repeat.for="cp of clientHelper.clientProperties"
 										model.bind="cp">
 									${cp}
@@ -105,8 +105,8 @@
 						<span class="input-group-btn">
 							<button type="button" class="glyphicon glyphicon-remove btn btn-secondary" click.delegate="removeRedirectInput(uriInput)"></button>
 						</span>
-						<strong class="error" repeat.for="errorInfo of clientRedirectUrlErrors">${errorInfo.error.message}</strong>
 					</div>
+					<strong class="error" repeat.for="errorInfo of clientRedirectUrlErrors">${errorInfo.error.message}</strong>
 				</div>
 
 				<div class="form-group" validation-errors.bind="clientFrontChannelLogoutUrlErrors">
@@ -126,7 +126,7 @@
 				<div class="form-group">
 					<!-- Submit Button -->
 					<button type="submit" disabled.bind="!canSave" class="btn btn-primary">Update</button>
-					<button class="btn btn-danger control-label"  click.delegate="delete(client.clientId)"><span class="glyphicon glyphicon-trash"></span> Delete Client</button>
+					<button class="btn btn-danger control-label" click.delegate="delete(client.clientId)"><span class="glyphicon glyphicon-trash"></span> Delete Client</button>
 				</div>
 			</form>
 		</div>

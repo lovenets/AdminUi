@@ -47,7 +47,7 @@ export class AddClient {
 	
 		this.redirectUriArray.push(new UriInput(1, ""));
 	
-		this.validationHelper.setupValidation(this.client);			// get validation rules from validationhelper
+		this.validationHelper.setupValidation();			// get validation rules from validationhelper
 	
 	}
 
