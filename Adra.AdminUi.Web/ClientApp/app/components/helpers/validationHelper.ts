@@ -6,6 +6,11 @@ import { UriInput } from '../helpers/UriInput';
 
 export class ValidationHelper {
 	public urlRegex: any = /^(http:\/.|https:\/.)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?$/;
+	public clientName: string = "";
+	public clientId: string = "";
+	public grantType: string = "";
+	public clientUri: string = "";
+
 
 	public setupValidation() {
 		
@@ -22,5 +27,12 @@ export class ValidationHelper {
 		ValidationRules
 			.ensure('uri').matches(this.urlRegex)
 			.on(UriInput)
+
+		ValidationRules
+			.ensure('clientId').required().withMessage("Client Id is required")
+			.ensure('clientName').required().withMessage("Client Name is required")
+			.ensure('grantType').required().withMessage("Client Name is required")
+			.ensure('clientUri').required().withMessage("Client Name is required")
+			.on(this)
 	}
 }

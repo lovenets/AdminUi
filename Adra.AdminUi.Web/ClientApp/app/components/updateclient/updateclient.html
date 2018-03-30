@@ -14,14 +14,14 @@
 						<div class="col-xs-5" validation-errors.bind="clientIdErrors">
 							<!-- Client Id -->
 							<label for="clientId" class="control-label">Client ID</label>
-							<input type="text" class="form-control" id="clientId" name="clientId" placeholder="Client ID" value.bind="client.clientId & validate">
+							<input type="text" class="form-control" id="clientId" name="clientId" placeholder="Client ID" value.bind="validationHelper.clientId & validate">
 							<strong class="error" repeat.for="errorInfo of clientIdErrors">${errorInfo.error.message}</strong>
 						</div>
 
 						<div class="col-xs-5" validation-errors.bind="clientNameErrors">
 							<!-- Client Name -->
 							<label for="clientName" class="control-label">Client Name</label>
-							<input type="text" class="form-control" id="clientName" name="clientName" placeholder="Client Name" value.bind="client.clientName & validate">
+							<input type="text" class="form-control" id="clientName" name="clientName" placeholder="Client Name" value.bind="validationHelper.clientName & validate">
 							<strong class="error" repeat.for="errorInfo of clientNameErrors">${errorInfo.error.message}</strong>
 						</div>
 					</div>
@@ -39,8 +39,7 @@
 						<div class="col-xs-5" validation-errors.bind="clientGrantTypeErrors">
 							<!-- Grant Type -->
 							<label for="grantType" class="control-label">Grant Type</label>
-							<select class="form-control" value.bind="client.grantType & validate">
-
+							<select class="form-control" value.bind="validationHelper.grantType & validate">
 								<option repeat.for="gt of clientHelper.grantTypes"
 										model.bind="gt">
 									${gt}
@@ -92,7 +91,7 @@
 				<div class="form-group" validation-errors.bind="clientUriErrors">
 					<!-- Client Redirect Url -->
 					<label for="clientUri" class="control-label">Client URI</label>
-					<input type="text" class="form-control" id="clientUri" name="clientUri" placeholder="Client URI" value.bind="client.clientUri & validate">
+					<input type="text" class="form-control" id="clientUri" name="clientUri" placeholder="Client URI" value.bind="validationHelper.clientUri & validate">
 					<strong class="error" repeat.for="errorInfo of clientUriErrors">${errorInfo.error.message}</strong>
 				</div>
 

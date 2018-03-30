@@ -43,9 +43,13 @@ export class UpdateClient {
 	private validateWhole() {		
 		this.validator.validateObject(this.client)
 			.then(results => this.errors = results);
-		this.canSave = this.isAllvalid(this.errors);		
+		this.canSave = this.isAllvalid(this.errors);	
+
+		//console.log(this.controller.errors);
+		
 	}
-	private isAllvalid(errors: any) {	
+	private isAllvalid(errors: any) {
+		//console.log(errors);
 		for (var error in errors)
 			if (!errors[error].valid) return false;
 		return true;
@@ -89,7 +93,12 @@ export class UpdateClient {
 				} else {
 					this.redirectUriArray.push(new UriInput(0, ""));
 				}				
-				this.client = data;		
+				this.client = data;
+				this.validationHelper.clientId = data.clientId;
+				this.validationHelper.clientName = data.clientName;
+				this.validationHelper.grantType = data.grantType;
+				this.validationHelper.clientUri = data.clientUri;
+
 			});
 	}
 	public resetController() {
