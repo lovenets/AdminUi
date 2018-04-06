@@ -4,6 +4,7 @@ using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Entities;
 using IdentityServer4.EntityFramework.Options;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,16 +14,14 @@ namespace DataAccessLayer.Repositories
     public class ApplicationClientRepository : IApplicationClientRepository
     {
         private ApplicationConfigurationDbContext _DbContext;
-        public ApplicationClientRepository()
+        public ApplicationClientRepository(IConfiguration configuration)
         {
+            string connectionString = configuration.GetConnectionString("IdentityDemo");
             var optionsBuilder = new DbContextOptionsBuilder<ConfigurationDbContext>();
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=identitydemosql;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer(connectionString);
             var ob = new ConfigurationStoreOptions();
             
             _DbContext = new ApplicationConfigurationDbContext(optionsBuilder.Options, ob);
-
-
-            //_DbContext = new ApplicationConfigurationDbContext(Options.UseSqlServer(connection));
         }
         public IEnumerable<Client> GetClients()
         {
