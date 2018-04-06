@@ -8,7 +8,7 @@
 	z-index: 9990;
 	height: 100%;
 	width: 100%;
-	background: #0d71cf;
+	background: #ffd800;
 	opacity: 0.1;
 	left: 0;
 	top: 0;
@@ -24,7 +24,7 @@
 }
 
 	.spinner > div {
-		background-color: #0d71cf;
+		background-color: #ffd800;
 		height: 100%;
 		width: 6px;
 		display: inline-block;
