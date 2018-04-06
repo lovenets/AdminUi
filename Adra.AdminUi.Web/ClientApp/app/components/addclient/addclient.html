@@ -31,7 +31,7 @@
 						<div class="col-xs-5" validation-errors.bind="clientSecretErrors">
 							<!-- Client Secret -->
 							<label for="clientSecret" class="control-label">Client Secret</label>
-							<input type="text" class="form-control" id="clientSecret" name="clientSecret" placeholder="Clinet Secret" value.bind="client.clientSecret & validate">
+							<input type="text" class="form-control" id="clientSecret" name="clientSecret" placeholder="Client Secret" value.bind="client.clientSecret & validate">
 							<strong class="error" repeat.for="errorInfo of clientSecretErrors">${errorInfo.error.message}</strong>
 						</div>
 
@@ -68,7 +68,7 @@
 							<!-- Identity Resources -->
 							<label for="identityResources" class="control-label">Identity Resources</label>
 							<p repeat.for="identityResource of clientHelper.identityResources">
-								<input type="checkbox" model.bind="identityResource.name" checked.bind="selectedIdentityResources">
+								<input type="checkbox" model.bind="identityResource.name" checked.bind="selectedIdentityResources" disable.bind="checkDisabled(identityResource.name)">
 								${identityResource.name}
 							</p>
 						</div>

@@ -141,7 +141,7 @@ export class UpdateClient {
 					alert("Client Successfully Updated.");
 					this.router.navigateToRoute('viewallclients')
 				} else {
-					alert("Unable to update the client");
+					alert("Update failed");
 					this.router.navigateToRoute('viewallclients')
 				}
 			});
@@ -164,6 +164,9 @@ export class UpdateClient {
 				.then(data => {
 					if (data == "ok") {
 						alert("Client Successfully Deleted.");
+						this.router.navigateToRoute('viewallclients')
+					} else {
+						alert("Delete failed");
 						this.router.navigateToRoute('viewallclients')
 					}
 				});
