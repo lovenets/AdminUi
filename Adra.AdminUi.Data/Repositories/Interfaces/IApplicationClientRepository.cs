@@ -13,6 +13,7 @@ namespace DataAccessLayer.Repositories.Interfaces
         void AddClient(Client client);
         Client GetClientByClientId(string clientId);
         void DeleteClient(Client client);
-        
+        void UpdateClient(Client client);
+
     }
 }

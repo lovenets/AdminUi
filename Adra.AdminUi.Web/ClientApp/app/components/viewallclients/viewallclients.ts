@@ -10,6 +10,7 @@ export class ViewAllClients {
 	public httpClient: HttpClient;
 	public router: Router;
 	public clients: Array<Client> = [];
+	public active: boolean = false;
 
 	constructor(httpClient: HttpClient, router: Router) {
 		this.httpClient = httpClient;
@@ -20,10 +21,12 @@ export class ViewAllClients {
 	}
 
 	public getAllClients() {
+		this.active = true;
 		this.httpClient.fetch('api/client/getClients')
 			.then(result => result.json())
 			.then(data => {
 				this.clients = data;
+				this.active = false;
 			});
 	}
 

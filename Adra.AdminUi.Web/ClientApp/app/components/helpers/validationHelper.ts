@@ -6,10 +6,13 @@ import { UriInput } from '../helpers/UriInput';
 
 export class ValidationHelper {
 	public urlRegex: any = /^(http:\/.|https:\/.)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?$/;
+	public client = new Client();
 	public clientName: string = "";
 	public clientId: string = "";
 	public grantType: string = "";
 	public clientUri: string = "";
+	public frontChannelLogoutUri: string = "";
+	public postLogoutUri: string = "";
 
 
 	public setupValidation() {
@@ -32,7 +35,9 @@ export class ValidationHelper {
 			.ensure('clientId').required().withMessage("Client Id is required")
 			.ensure('clientName').required().withMessage("Client Name is required")
 			.ensure('grantType').required().withMessage("Client Name is required")
-			.ensure('clientUri').required().withMessage("Client Name is required")
+			.ensure('clientUri').required().matches(this.urlRegex)
+			.ensure('frontChannelLogoutUri').matches(this.urlRegex)
+			.ensure('postLogoutUri').matches(this.urlRegex)
 			.on(this)
 	}
 }

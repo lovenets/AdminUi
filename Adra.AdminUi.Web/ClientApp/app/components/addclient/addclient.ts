@@ -105,6 +105,10 @@ export class AddClient {
 					if (data == "ok") {
 						alert("Client Successfully Added.");
 						this.router.navigateToRoute('viewallclients')
+					} else {
+						if (data = "2601") {
+							alert("Client Id already exists");
+						}
 					}
 				});
 

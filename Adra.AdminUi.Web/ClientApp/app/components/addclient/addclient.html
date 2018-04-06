@@ -12,14 +12,14 @@
 
 						<div class="col-xs-5" validation-errors.bind="clientIdErrors">
 							<!-- Client Id -->
-							<label for="clientId" class="control-label">Client ID</label>
+							<label for="clientId" class="control-label">Client ID</label><span class="error">*</span>
 							<input type="text" class="form-control" id="clientId" name="clientId" placeholder="Client ID" value.bind="client.clientId & validate">
 							<strong class="error" repeat.for="errorInfo of clientIdErrors">${errorInfo.error.message}</strong>
 						</div>
 
 						<div class="col-xs-5" validation-errors.bind="clientNameErrors">
 							<!-- Client Name -->
-							<label for="clientName" class="control-label">Client Name</label>
+							<label for="clientName" class="control-label">Client Name</label><span class="error">*</span>
 							<input type="text" class="form-control" id="clientName" name="clientName" placeholder="Client Name" value.bind="client.clientName & validate">
 							<strong class="error" repeat.for="errorInfo of clientNameErrors">${errorInfo.error.message}</strong>
 						</div>
@@ -86,7 +86,7 @@
 
 				<div class="form-group" validation-errors.bind="clientUriErrors">
 					<!-- Client Redirect Url -->
-					<label for="clientUri" class="control-label">Client URI</label>
+					<label for="clientUri" class="control-label">Client URI</label><span class="error">*</span>
 					<input type="text" class="form-control" id="clientUri" name="clientUri" placeholder="Client URI" value.bind="client.clientUri & validate">
 					<strong class="error" repeat.for="errorInfo of clientUriErrors">${errorInfo.error.message}</strong>
 				</div>

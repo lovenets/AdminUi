@@ -64,5 +64,13 @@ namespace DataAccessLayer.Repositories
              _DbContext.Remove(client);
             _DbContext.SaveChanges();
         }
+
+        public void UpdateClient(Client client)
+        {
+            var ExistingClient = _DbContext.GetClientByID(client.ClientId);
+            var exclient = _DbContext.Clients.Find(ExistingClient.Id);
+            _DbContext.Entry(ExistingClient).CurrentValues.SetValues(client);
+            _DbContext.SaveChanges();
+        }
     }
 }

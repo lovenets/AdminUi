@@ -23,9 +23,9 @@ export class UpdateClient {
 	allowedScopes: Array<number> = [];
 	redirectUrls: Array<string> = [];
 	redirectUriArray: Array<UriInput> = [];
-	errors: any;
-
+	errors: any;	
 	public name: string;
+	public active: boolean = false;
 
 	constructor(httpClient: HttpClient, router: Router, clientHelper: ClientHelper, controllerFactory: ValidationControllerFactory, validator: Validator, validationHelper: ValidationHelper) {
 		this.httpClient = httpClient;
@@ -33,29 +33,26 @@ export class UpdateClient {
 		this.router = router;
 		this.validationHelper = validationHelper;
 		this.validator = validator;
-		this.controller = controllerFactory.createForCurrentScope(validator);
+		this.controller = controllerFactory.createForCurrentScope(validator);		
 
+		this.canSave = false;
 		this.controller.validateTrigger = validateTrigger.changeOrBlur;
 		this.controller.subscribe(event => this.validateWhole());
-
-	}
-
-	private validateWhole() {		
-		this.validator.validateObject(this.client)
-			.then(results => this.errors = results);
-		this.canSave = this.isAllvalid(this.errors);	
-
-		//console.log(this.controller.errors);
 		
 	}
-	private isAllvalid(errors: any) {
-		//console.log(errors);
-		for (var error in errors)
-			if (!errors[error].valid) return false;
-		return true;
+
+	private validateWhole() {
+		let errorCount = this.controller.errors.length;
+		if (errorCount == 0) {
+			this.canSave = true;
+		} else {
+			this.canSave = false;
+		}		
 	}
 
 	activate(params: { clientId: string; }) {
+		this.active = true;
+
 		var client = { ClientId: params.clientId };
 		this.validationHelper.setupValidation(); 	// get validation rules from validationhelper
 		this.httpClient.fetch('api/client/getclientbyclientid',
@@ -98,14 +95,11 @@ export class UpdateClient {
 				this.validationHelper.clientName = data.clientName;
 				this.validationHelper.grantType = data.grantType;
 				this.validationHelper.clientUri = data.clientUri;
-
+				this.validationHelper.frontChannelLogoutUri = data.frontChannelLogoutUrl;
+				this.validationHelper.postLogoutUri = data.postLogoutUrl;
+				this.active = false;
 			});
-	}
-	public resetController() {
-		if (this.controller.errors) {
-			this.controller.reset();
-		}
-	}
+	}	
 
 	public addRedirectInput() {
 		var id = this.redirectUriArray.length + 1;
@@ -131,7 +125,7 @@ export class UpdateClient {
 			}
 		}
 
-		var client = { ClientId: this.client.clientId, ClientName: this.client.clientName, ClientSecret: this.client.clientSecret, GrantType: this.client.grantType, ClientProperty: this.client.clientProperty, AllowedScopes: this.allowedScopes, ClientUri: this.client.clientUri, RedirectUrls: this.redirectUrls, FrontChannelLogoutUrl: this.client.frontChannelLogoutUrl, PostLogoutUrl: this.client.postLogoutUrl };
+		var client = { ClientId: this.validationHelper.clientId, ClientName: this.validationHelper.clientName, ClientSecret: this.client.clientSecret, GrantType: this.client.grantType, ClientProperty: this.client.clientProperty, AllowedScopes: this.allowedScopes, ClientUri: this.validationHelper.clientUri, RedirectUrls: this.redirectUrls, FrontChannelLogoutUrl: this.validationHelper.frontChannelLogoutUri, PostLogoutUrl: this.validationHelper.postLogoutUri };
 
 		this.httpClient.fetch('api/client/updateclient',
 			{
@@ -145,6 +139,9 @@ export class UpdateClient {
 			.then(data => {
 				if (data == "ok") {
 					alert("Client Successfully Updated.");
+					this.router.navigateToRoute('viewallclients')
+				} else {
+					alert("Unable to update the client");
 					this.router.navigateToRoute('viewallclients')
 				}
 			});
