@@ -68,7 +68,7 @@
 							<!-- Identity Resources -->
 							<label for="identityResources" class="control-label">Identity Resources</label>
 							<p repeat.for="identityResource of clientHelper.identityResources">
-								<input type="checkbox" model.bind="identityResource.name" checked.bind="selectedIdentityResources" disable.bind="checkDisabled(identityResource.name)">
+								<input type="checkbox" model.bind="identityResource.name" checked.bind="selectedIdentityResources" disable.bind="identityResource.disabled">
 								${identityResource.name}
 							</p>
 						</div>

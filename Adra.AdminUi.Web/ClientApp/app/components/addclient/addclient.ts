@@ -19,7 +19,6 @@ export class AddClient {
 	validationHelper: ValidationHelper;
 	public openid: any = "openid";
 
-
 	public clientName: string = "";
 	public clientId: string = "";
 	public clientSecret: string = "";
@@ -68,16 +67,9 @@ export class AddClient {
 		//console.log(this.controller.errors);
 	}
 
-	public checkDisabled(name: string) {
-		console.log(typeof(name));
-		if (name == "openid") {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	public add() {
+		console.log(this.clientHelper.identityResources);
+
 		for (let resource of this.selectedIdentityResources) {
 			this.allowedScopes.push(resource);
 		}
