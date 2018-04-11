@@ -66,7 +66,7 @@
 					<div class="row">
 						<div class="col-xs-5">
 							<!-- Identity Resources -->
-							<label for="identityResources" class="control-label">Identity Resources</label>
+							<label for="identityResources" class="control-label">Identity Resources</label><small> ( openid is default) </small>
 							<p repeat.for="identityResource of clientHelper.identityResources">
 								<input type="checkbox" model.bind="identityResource.name" checked.bind="selectedIdentityResources" disable.bind="identityResource.disabled">
 								${identityResource.name}
