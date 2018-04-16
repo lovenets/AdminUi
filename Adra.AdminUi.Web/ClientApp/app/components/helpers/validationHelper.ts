@@ -5,7 +5,7 @@ import { UriInput } from '../helpers/UriInput';
 
 
 export class ValidationHelper {
-	public urlRegex: any = /^(http:\/.|https:\/.)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?$/;
+	public urlRegex: any = /^http(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$/;
 	public client = new Client();
 	public clientName: string = "";
 	public clientId: string = "";
