@@ -25,6 +25,7 @@ export class ViewAllClients {
 		this.httpClient.fetch('api/client/getClients')
 			.then(result => result.json())
 			.then(data => {
+				data.sort((x: any, y: any) => x.clientId.toLowerCase().localeCompare(y.clientId.toLowerCase())) // sort alphabatically
 				this.clients = data;
 				this.active = false;
 			});
