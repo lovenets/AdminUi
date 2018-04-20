@@ -52,6 +52,11 @@ export class ClientHelper {
 			.then(data => {
 				for (let identityResource of data) {
 					identityResource.name = identityResource.name.replace(/_/g, " "); // to replace all occurences
+					if (identityResource.name == "openid") {
+						identityResource.disabled = true;
+					} else {
+						identityResource.disabled = false;
+					}
 				}
 				this.identityResources = data;
 			});

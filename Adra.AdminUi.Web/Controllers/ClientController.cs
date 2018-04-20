@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -63,8 +64,15 @@ namespace ClientApp.Controllers
         [Route("addclient")]
         public string AddClient([FromBody]Client client)
         {
-            _applicationClientService.AddClient(client);
-            return "ok";
+            try
+            {
+                _applicationClientService.AddClient(client);
+                return "ok";
+            }
+            catch (Exception e) {
+                SqlException innerException = e.InnerException as SqlException;
+                return innerException.Number.ToString();
+            }            
         }
 
         [HttpPost]

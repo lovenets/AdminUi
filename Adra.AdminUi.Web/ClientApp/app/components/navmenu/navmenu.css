@@ -6,8 +6,8 @@ li .glyphicon {
 li.au-target.link-active a,
 li.au-target.link-active a:hover,
 li.au-target.link-active a:focus {
-    background-color: #ffd800;
-    color: white;
+	background-color: #ffd800;
+	color: white;
 }
 
 /* Keep the nav menu independent of scrolling and on top of other items */
